@@ -17,23 +17,18 @@ const getSearchResult = async function (query) {
   );
   const data = await response.json();
   const result = data.query.pages;
-  let elements = [];
-  for (const key in result) {
-    if (Object.hasOwnProperty.call(result, key)) {
-      const element = result[key];
-      elements.push(element);
-    }
-  }
-  elements.forEach(function (el) {
+
+  // Loop over the object
+  for (const [id, { extract, pageid, title }] of Object.entries(result)) {
     const html = `
-      <div class="results">
-      <a href="${curId}${el.pageid}" class="results-title" target="_blank">${el.title}</a>
-      <p class="results-text">${el.extract}</p>
-      </div>
-      `;
+        <div class="results">
+        <a href="${curId}${pageid}" class="results-title" target="_blank">${title}</a>
+        <p class="results-text">${extract}</p>
+        </div>
+        `;
 
     resultsDOM.insertAdjacentHTML('beforeend', html);
-  });
+  }
 };
 
 form.addEventListener('submit', function (e) {
